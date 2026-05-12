@@ -1,0 +1,14 @@
+/Users/Joss/RiderProjects/ahorcado/ahorcado/bin/Debug/net10.0/ahorcado
+/Users/Joss/RiderProjects/ahorcado/ahorcado/bin/Debug/net10.0/ahorcado.deps.json
+/Users/Joss/RiderProjects/ahorcado/ahorcado/bin/Debug/net10.0/ahorcado.runtimeconfig.json
+/Users/Joss/RiderProjects/ahorcado/ahorcado/bin/Debug/net10.0/ahorcado.dll
+/Users/Joss/RiderProjects/ahorcado/ahorcado/bin/Debug/net10.0/ahorcado.pdb
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.GeneratedMSBuildEditorConfig.editorconfig
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.AssemblyInfoInputs.cache
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.AssemblyInfo.cs
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.csproj.CoreCompileInputs.cache
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.dll
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/refint/ahorcado.dll
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.pdb
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.genruntimeconfig.cache
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ref/ahorcado.dll
