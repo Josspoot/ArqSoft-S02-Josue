@@ -4,13 +4,9 @@
     {
         private List<string> _palabras = new()
         {
-            "arquitectura",
-            "encapsulamiento",
-            "interfaz",
-            "herencia",
-            "polimorfismo"
+            "arquitectura", "interfaz", "polimorfismo",
+            "encapsulamiento", "herencia"
         };
-
         private string _palabraSecreta;
         private List<char> _letrasUsadas;
         private int _intentosRestantes;
@@ -25,28 +21,28 @@
 
         public void Jugar()
         {
+            Console.Clear();
+            Console.WriteLine("=== AHORCADO ===");
+
             while (_intentosRestantes > 0)
             {
                 MostrarTablero();
-                
+
                 if (VerificarVictoria())
                 {
-                    Console.WriteLine($"\n¡Ganaste! La palabra era: {_palabraSecreta}");
-                    Reiniciar();
+                    Console.WriteLine("\n¡Ganaste! La palabra era: " + _palabraSecreta);
+                    Console.Write("\n¿Jugar otra vez? (s/n): ");
+                    if (Console.ReadLine()?.ToLower() == "s")
+                        new Juego().Jugar();
                     return;
                 }
 
                 Console.Write("\nIngresa una letra: ");
-                string entrada = Console.ReadLine()?.ToLower() ?? "";
-                
-                if (string.IsNullOrEmpty(entrada)) continue;
-
-                char letra = entrada[0];
+                char letra = Console.ReadLine()[0];
 
                 if (_letrasUsadas.Contains(letra))
                 {
                     Console.WriteLine("Ya usaste esa letra.");
-                    Thread.Sleep(1000); // Pausa breve para leer el mensaje
                     continue;
                 }
 
@@ -57,41 +53,28 @@
             }
 
             MostrarTablero();
-            Console.WriteLine($"\nPerdiste. La palabra era: {_palabraSecreta}");
-            Reiniciar();
+            Console.WriteLine("\nPerdiste. La palabra era: " + _palabraSecreta);
+            Console.Write("\n¿Jugar otra vez? (s/n): ");
+            if (Console.ReadLine()?.ToLower() == "s")
+                new Juego().Jugar();
         }
 
         private bool VerificarVictoria()
         {
             foreach (char c in _palabraSecreta)
-            {
                 if (!_letrasUsadas.Contains(c)) return false;
-            }
             return true;
-        }
-
-        private void Reiniciar()
-        {
-            Console.Write("\n¿Jugar otra vez? (s/n): ");
-            if (Console.ReadLine()?.ToLower() == "s")
-            {
-                new Juego().Jugar();
-            }
         }
 
         private void MostrarTablero()
         {
             Console.Clear();
-            Console.WriteLine("=== AHORCADO ===");
             MostrarAhorcado();
-            Console.WriteLine($"\nIntentos restantes: {_intentosRestantes}");
+            Console.WriteLine($"Intentos restantes: {_intentosRestantes}");
             Console.WriteLine($"Letras usadas: {string.Join(", ", _letrasUsadas)}");
             Console.Write("Palabra: ");
-            
             foreach (char c in _palabraSecreta)
-            {
-                Console.Write(_letrasUsadas.Contains(c) ? $"{c} " : "_ ");
-            }
+                Console.Write(_letrasUsadas.Contains(c) ? c : '_');
             Console.WriteLine();
         }
 
@@ -99,19 +82,15 @@
         {
             string[] etapas = new string[]
             {
-                "-----\n |   |\n |\n |\n |\n |\n=========",
-                "-----\n |   |\n O   |\n |\n |\n |\n=========",
-                "-----\n |   |\n O   |\n |   |\n |\n |\n=========",
-                "-----\n |   |\n O   |\n/|   |\n |\n |\n=========",
-                "-----\n |   |\n O   |\n/|\\  |\n |\n |\n=========",
-                "-----\n |   |\n O   |\n/|\\  |\n/    |\n |\n=========",
-                "-----\n |   |\n O   |\n/|\\  |\n/ \\  |\n |\n========="
+                " -----\n |    |\n        |\n        |\n        |\n        |\n=========",
+                " -----\n |    |\n O      |\n        |\n        |\n        |\n=========",
+                " -----\n |    |\n O      |\n |      |\n        |\n        |\n=========",
+                " -----\n |    |\n O      |\n/|      |\n        |\n        |\n=========",
+                " -----\n |    |\n O      |\n/|\\     |\n        |\n        |\n=========",
+                " -----\n |    |\n O      |\n/|\\     |\n/       |\n        |\n=========",
+                " -----\n |    |\n O      |\n/|\\     |\n/ \\     |\n        |\n========="
             };
-
             Console.WriteLine(etapas[6 - _intentosRestantes]);
         }
     }
-
-    // Para ejecutarlo en Program.cs:
-    // class Program { static void Main() { new Juego().Jugar(); } }
 }

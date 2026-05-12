@@ -12,3 +12,4 @@
 /Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.pdb
 /Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.genruntimeconfig.cache
 /Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ref/ahorcado.dll
+/Users/Joss/RiderProjects/ahorcado/ahorcado/obj/Debug/net10.0/ahorcado.sourcelink.json
