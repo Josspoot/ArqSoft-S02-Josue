@@ -12,8 +12,17 @@ namespace Ahorcado
         public void MostrarTablero()
         {
             Console.Clear();
-            Console.WriteLine("=== AHORCADO ===");
+            Console.WriteLine("=== AHORCADO SOLID ===");
             MostrarAhorcado();
+
+            // Pista automática según el estado del motor
+            if (_motor.DebeMostrarPista)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"\n[PISTA]: La palabra comienza con: '{_motor.ObtenerPista()}'");
+                Console.ResetColor();
+            }
+
             Console.WriteLine($"\nIntentos restantes: {_motor.IntentosRestantes}");
             Console.WriteLine($"Letras usadas: {string.Join(", ", _motor.LetrasUsadas)}");
             Console.Write("Palabra: ");
@@ -53,7 +62,6 @@ namespace Ahorcado
                 "-----\n |   |\n O   |\n/|\\  |\n/ \\  |\n |\n========="
             };
 
-            // Evitamos que truene si los intentos bajan de 0 por error
             int indice = Math.Clamp(6 - _motor.IntentosRestantes, 0, 6);
             Console.WriteLine(etapas[indice]);
         }
