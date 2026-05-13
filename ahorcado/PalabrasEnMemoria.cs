@@ -2,14 +2,20 @@ namespace Ahorcado;
 
 public class PalabrasEnMemoria
 {
-    private readonly List<string> _palabras = new()
+    // Diccionario organizado por las categorías solicitadas
+    private readonly Dictionary<string, List<string>> _categorias = new()
     {
-        "arquitectura", "interfaz", "polimorfismo", "encapsulamiento", "herencia"
+        { "Arquitectura", new List<string> { "arquitectura", "componente", "descomposicion", "dependencia", "acoplamiento" } },
+        { "POO", new List<string> { "polimorfismo", "encapsulamiento", "herencia", "abstraccion", "clase" } },
+        { ".NET", new List<string> { "ensamblado", "namespace", "interfaz", "delegado", "middleware" } }
     };
 
-    public string getPalabras()
+    public string ObtenerPalabraAleatoria(string categoria)
     {
+        if (!_categorias.ContainsKey(categoria)) return "error";
+        
+        var lista = _categorias[categoria];
         var random = new Random();
-        return _palabras.ElementAt(random.Next(_palabras.Count));
+        return lista[random.Next(lista.Count)];
     }
 }
