@@ -1,82 +1,117 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Ahorcado
 {
     public class Juego
     {
-        private List<string> _palabras = new()
-{
-"arquitectura", "interfaz", "polimorfismo",
-"encapsulamiento", "herencia"
-};
         private string _palabraSecreta;
         private List<char> _letrasUsadas;
         private int _intentosRestantes;
+        private PalabrasEnMemoria _repositorio = new PalabrasEnMemoria();
+
         public Juego()
         {
-            var random = new Random();
-            _palabraSecreta = _palabras[random.Next(_palabras.Count)];
             _letrasUsadas = new List<char>();
             _intentosRestantes = 6;
         }
+
         public void Jugar()
         {
             Console.Clear();
-            Console.WriteLine("=== AHORCADO ===");
+            Console.WriteLine("=== BIENVENIDO AL AHORCADO ===");
+            Console.WriteLine("Selecciona una categoría:");
+            Console.WriteLine("1. Arquitectura");
+            Console.WriteLine("2. POO");
+            Console.WriteLine("3. .NET");
+            Console.Write("Opción: ");
+            
+            string opcion = Console.ReadLine();
+            string categoriaSeleccionada = opcion switch
+            {
+                "1" => "Arquitectura",
+                "2" => "POO",
+                "3" => ".NET",
+                _ => "Arquitectura" // Por defecto
+            };
+
+            // Asignamos la palabra según la categoría elegida
+            _palabraSecreta = _repositorio.ObtenerPalabraAleatoria(categoriaSeleccionada);
+
             while (_intentosRestantes > 0)
             {
-                MostrarTablero();
+                MostrarTablero(categoriaSeleccionada);
+
                 if (VerificarVictoria())
                 {
                     Console.WriteLine("\n¡Ganaste! La palabra era: " + _palabraSecreta);
-                    Console.Write("\n¿Jugar otra vez? (s/n): ");
-                    if (Console.ReadLine()?.ToLower() == "s")
-                        new Juego().Jugar();
+                    FinalizarJuego();
                     return;
                 }
+
                 Console.Write("\nIngresa una letra: ");
-                char letra = Console.ReadLine()[0];
+                string entrada = Console.ReadLine()?.ToLower();
+                if (string.IsNullOrEmpty(entrada)) continue;
+
+                char letra = entrada[0];
+
                 if (_letrasUsadas.Contains(letra))
                 {
-                    Console.WriteLine("Ya usaste esa letra.");
-                    continue;
+                    Console.WriteLine("\n--> Ya usaste esa letra. Enter para seguir...");
+                    Console.ReadLine();
                 }
-                _letrasUsadas.Add(letra);
-                if (!_palabraSecreta.Contains(letra))
-                    _intentosRestantes--;
+                else
+                {
+                    _letrasUsadas.Add(letra);
+                    if (!_palabraSecreta.Contains(letra)) _intentosRestantes--;
+                }
             }
-            MostrarTablero();
+
+            MostrarTablero(categoriaSeleccionada);
             Console.WriteLine("\nPerdiste. La palabra era: " + _palabraSecreta);
-            Console.Write("\n¿Jugar otra vez? (s/n): ");
-            if (Console.ReadLine()?.ToLower() == "s")
-                new Juego().Jugar();
+            FinalizarJuego();
         }
-        private bool VerificarVictoria()
-        {
-            foreach (char c in _palabraSecreta)
-                if (!_letrasUsadas.Contains(c)) return false;
-            return true;
-        }
-        private void MostrarTablero()
+
+        private bool VerificarVictoria() => _palabraSecreta.All(c => _letrasUsadas.Contains(c));
+
+        private void MostrarTablero(string cat)
         {
             Console.Clear();
+            Console.WriteLine($"=== AHORCADO | Categoría: {cat} ===");
             MostrarAhorcado();
             Console.WriteLine($"Intentos restantes: {_intentosRestantes}");
+
+            // Pista automática (Reto anterior)
+            if ((6 - _intentosRestantes) >= 3)
+            {
+                Console.WriteLine($"[PISTA]: Inicia con '{_palabraSecreta[0]}'");
+            }
+
             Console.WriteLine($"Letras usadas: {string.Join(", ", _letrasUsadas)}");
             Console.Write("Palabra: ");
             foreach (char c in _palabraSecreta)
-                Console.Write(_letrasUsadas.Contains(c) ? c : '_');
+                Console.Write(_letrasUsadas.Contains(c) ? c + " " : "_ ");
             Console.WriteLine();
         }
+
+        private void FinalizarJuego()
+        {
+            Console.Write("\n¿Jugar otra vez? (s/n): ");
+            if (Console.ReadLine()?.ToLower() == "s") new Juego().Jugar();
+        }
+
         private void MostrarAhorcado()
         {
             string[] etapas = new string[]
             {
-                " -----\n |   |\n     |\n     |\n     |\n     |\n=========",
-                " -----\n |   |\n O   |\n     |\n     |\n     |\n=========",
-                " -----\n |   |\n O   |\n |   |\n     |\n     |\n=========",
-                " -----\n |   |\n O   |\n/|   |\n     |\n     |\n=========",
-                " -----\n |   |\n O   |\n/|\\  |\n     |\n     |\n=========",
-                " -----\n |   |\n O   |\n/|\\  |\n/    |\n     |\n=========",
-                " -----\n |   |\n O   |\n/|\\  |\n/ \\  |\n     |\n========="
+                " -----\n |    |\n      |\n      |\n      |\n      |\n=========",
+                " -----\n |    |\n O    |\n      |\n      |\n      |\n=========",
+                " -----\n |    |\n O    |\n |    |\n      |\n      |\n=========",
+                " -----\n |    |\n O    |\n/|    |\n      |\n      |\n=========",
+                " -----\n |    |\n O    |\n/|\\   |\n      |\n      |\n=========",
+                " -----\n |    |\n O    |\n/|\\   |\n/     |\n      |\n=========",
+                " -----\n |    |\n O    |\n/|\\   |\n/ \\   |\n      |\n========="
             };
             Console.WriteLine(etapas[6 - _intentosRestantes]);
         }
