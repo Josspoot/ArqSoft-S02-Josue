@@ -1,119 +1,65 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
+using Ahorcado; // Asegura que el namespace se esté importando
 
-namespace Ahorcado
+while (true)
 {
-    public class Juego
+    Console.Clear();
+    Console.WriteLine("¿Qué juego quieres jugar?");
+    Console.WriteLine("  1 — Ahorcado");
+    Console.WriteLine("  2 — Viborita");
+    Console.WriteLine("  3 — Salir");
+    Console.Write("Opción: ");
+    var opcion = Console.ReadLine();
+
+    if (opcion == "1")
     {
-        private string _palabraSecreta;
-        private List<char> _letrasUsadas;
-        private int _intentosRestantes;
-        private PalabrasEnMemoria _repositorio = new PalabrasEnMemoria();
+        // --- LÓGICA DEL AHORCADO ---
+        // ¡Tu nueva clase Juego ya hace todo! Solo instánciala y ejecútala:
+        var juegoAhorcado = new Juego();
+        juegoAhorcado.Jugar();
+    }
+    else if (opcion == "2")
+    {
+        // --- LÓGICA DE LA VIBORITA ---
+        // Se asume que aún conservas las clases MotorViborita y ConsolaUIViborita
+        var motor = new MotorViborita();
+        var ui = new ConsolaUIViborita(motor);
 
-        public Juego()
+        Console.Clear();
+        Console.CursorVisible = false;
+
+        while (!motor.Ganado() && !motor.Perdido())
         {
-            _letrasUsadas = new List<char>();
-            _intentosRestantes = 6;
+            ui.MostrarTablero();
+            var tecla = ui.LeerTecla();
+
+            if (tecla == ConsoleKey.Q) break;
+
+            if (tecla != ConsoleKey.NoName)
+                motor.CambiarDireccion(tecla);
+
+            motor.Avanzar();
+            Thread.Sleep(150); // velocidad del juego
         }
 
-        public void Jugar()
-        {
-            Console.Clear();
-            Console.WriteLine("=== BIENVENIDO AL AHORCADO ===");
-            Console.WriteLine("Selecciona una categoría:");
-            Console.WriteLine("1. Arquitectura");
-            Console.WriteLine("2. POO");
-            Console.WriteLine("3. .NET");
-            Console.Write("Opción: ");
-            
-            string opcion = Console.ReadLine();
-            string categoriaSeleccionada = opcion switch
-            {
-                "1" => "Arquitectura",
-                "2" => "POO",
-                "3" => ".NET",
-                _ => "Arquitectura" // Por defecto
-            };
+        ui.MostrarTablero();
+        ui.MostrarMensaje(motor.Ganado()
+            ? "\n¡Ganaste! Llegaste a 10 puntos."
+            : "\nGame over.");
 
-            // Asignamos la palabra según la categoría elegida
-            _palabraSecreta = _repositorio.ObtenerPalabraAleatoria(categoriaSeleccionada);
-
-            while (_intentosRestantes > 0)
-            {
-                MostrarTablero(categoriaSeleccionada);
-
-                if (VerificarVictoria())
-                {
-                    Console.WriteLine("\n¡Ganaste! La palabra era: " + _palabraSecreta);
-                    FinalizarJuego();
-                    return;
-                }
-
-                Console.Write("\nIngresa una letra: ");
-                string entrada = Console.ReadLine()?.ToLower();
-                if (string.IsNullOrEmpty(entrada)) continue;
-
-                char letra = entrada[0];
-
-                if (_letrasUsadas.Contains(letra))
-                {
-                    Console.WriteLine("\n--> Ya usaste esa letra. Enter para seguir...");
-                    Console.ReadLine();
-                }
-                else
-                {
-                    _letrasUsadas.Add(letra);
-                    if (!_palabraSecreta.Contains(letra)) _intentosRestantes--;
-                }
-            }
-
-            MostrarTablero(categoriaSeleccionada);
-            Console.WriteLine("\nPerdiste. La palabra era: " + _palabraSecreta);
-            FinalizarJuego();
-        }
-
-        private bool VerificarVictoria() => _palabraSecreta.All(c => _letrasUsadas.Contains(c));
-
-        private void MostrarTablero(string cat)
-        {
-            Console.Clear();
-            Console.WriteLine($"=== AHORCADO | Categoría: {cat} ===");
-            MostrarAhorcado();
-            Console.WriteLine($"Intentos restantes: {_intentosRestantes}");
-
-            // Pista automática (Reto anterior)
-            if ((6 - _intentosRestantes) >= 3)
-            {
-                Console.WriteLine($"[PISTA]: Inicia con '{_palabraSecreta[0]}'");
-            }
-
-            Console.WriteLine($"Letras usadas: {string.Join(", ", _letrasUsadas)}");
-            Console.Write("Palabra: ");
-            foreach (char c in _palabraSecreta)
-                Console.Write(_letrasUsadas.Contains(c) ? c + " " : "_ ");
-            Console.WriteLine();
-        }
-
-        private void FinalizarJuego()
-        {
-            Console.Write("\n¿Jugar otra vez? (s/n): ");
-            if (Console.ReadLine()?.ToLower() == "s") new Juego().Jugar();
-        }
-
-        private void MostrarAhorcado()
-        {
-            string[] etapas = new string[]
-            {
-                " -----\n |    |\n      |\n      |\n      |\n      |\n=========",
-                " -----\n |    |\n O    |\n      |\n      |\n      |\n=========",
-                " -----\n |    |\n O    |\n |    |\n      |\n      |\n=========",
-                " -----\n |    |\n O    |\n/|    |\n      |\n      |\n=========",
-                " -----\n |    |\n O    |\n/|\\   |\n      |\n      |\n=========",
-                " -----\n |    |\n O    |\n/|\\   |\n/     |\n      |\n=========",
-                " -----\n |    |\n O    |\n/|\\   |\n/ \\   |\n      |\n========="
-            };
-            Console.WriteLine(etapas[6 - _intentosRestantes]);
-        }
+        Console.CursorVisible = true;
+        Console.WriteLine("\nPresiona cualquier tecla para volver al menú...");
+        Console.ReadKey(true);
+    }
+    else if (opcion == "3")
+    {
+        Console.WriteLine("¡Gracias por jugar!");
+        break; // Rompe el bucle y cierra la consola
+    }
+    else
+    {
+        Console.WriteLine("Opción no válida. Presiona cualquier tecla para continuar...");
+        Console.ReadKey(true);
     }
 }
